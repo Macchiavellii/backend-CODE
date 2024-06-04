@@ -1,6 +1,6 @@
 const express = require('express');
 const foodRouter = require('./routes/user.route');
-   
+console.log('log da rimuovere')
 const app = express();
 
 app.use(express.json());
