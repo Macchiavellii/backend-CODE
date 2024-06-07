@@ -1,18 +1,29 @@
 const fs = require('fs').promises;
 
-//FUNZIONI INTERNE,  NON COLLEGATE A NESSUN ENDPOINT API
-const leggiUtentiDalFile = async () => {
-  try {
-    const jsonData = await fs.readFile('database/users.json',"utf8");
-    const data = JSON.parse(jsonData)
-    return data; 
-  } catch (error) {
-      return error;
-  }
+//FUNZIONI INTERNE, NON COLLEGATE A NESSUN ENDPOINT API
+const leggiUtentiDalFile =  () => {
+  return fs.readFile('database/users.json',"utf8")
+    .then((resp)=>{
+      const data = JSON.parse(resp)
+      return data; 
+    }).catch((err)=>{
+      return err;
+    });
 };
+
+const scriviSingoloUtenteSuFile = async (utente) => {
+  try {
+    await fs.writeFile('database/'+utente.nome+'_'+utente.id+'.json', JSON.stringify(utente, null, 2), 'utf8');
+    return true;
+  } catch (error) {
+    console.error('Errore scrittura su singolo file!!!!!!!!!!!', error)
+    return false;
+  }
+}
+
 const scriviUtentiSulFile = async (data) => {
   try {
-    await fs.writeFile('database/users.json', JSON.stringify(data, null, 2), "utf8");
+    await fs.writeFile('database/users'+'.json', JSON.stringify(data, null, 2), "utf8");
     return true;
   } catch (error) {
     console.error('Errore scrittura su file!!!!!!!!!!!', error)
@@ -39,7 +50,6 @@ const findById = async (req, res) => {
 };
 
 const postById = async (req, res) => {
-  const resp = res;
   try {
     const data = await leggiUtentiDalFile();
     const nuovoUserId = data.utenti.length + 1;
@@ -48,17 +58,24 @@ const postById = async (req, res) => {
     utente.id = nuovoUserId;
     
     data.utenti.push(utente);
+    
     const result = await scriviUtentiSulFile(data);
     if (result) {
-      resp.status(201).send({message: 'Utente inserito correttamente'});
+      console.log('result : '+ result)
+      const result2 = await scriviSingoloUtenteSuFile(utente);
+      if (result2) {
+        console.log('result2 : '+ result2)
+        res.status(201).send({message: 'Utente inserito correttamente'});
+      }
+     
     }
     else {
-      resp.status(500).send({message: 'Errore inserimento utente'});
+      res.status(500).send({message: 'Errore inserimento utente'});
     }
    
   } catch (error) {
     console.log(error)
-    resp.status(500).send({message: 'Errore: ' + error});
+    res.status(500).send({message: 'Errore: ' + error});
   }
 };
 
