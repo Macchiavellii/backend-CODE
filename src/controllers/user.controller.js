@@ -1,5 +1,5 @@
 const fs = require('fs').promises;
-const user = require('.model/userModel');
+const user = require('../models/userModel');
 
 //FUNZIONI INTERNE, NON COLLEGATE A NESSUN ENDPOINT API
 /*const leggiUtentiDalFile =  () => {
