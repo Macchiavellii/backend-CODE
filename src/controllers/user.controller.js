@@ -1,9 +1,9 @@
-const fs = require('fs').promises;
-const user = require('../models/userModel');
+//const fs = require('fs').promises;
+const Utenti = require('../models/userModel');
 
 //FUNZIONI INTERNE, NON COLLEGATE A NESSUN ENDPOINT API
 /*const leggiUtentiDalFile =  () => {
-  return fs.readFile('database/users.json',"utf8")
+  return fs.readFile('database/Utenti  json',"utf8")
     .then((resp)=>{
       const data = JSON.parse(resp)
       return data; 
@@ -12,11 +12,11 @@ const user = require('../models/userModel');
     });
 };*/
 
-async function getUsers() {
-  const users = await user.findAll();
-  console.log(users);
+async function getUtenti() {
+  const utenti = await Utenti.findAll();
+  console.log(utenti);
   }
-  //getUsers();
+  //getUtenti();
 
 /*const scriviSingoloUtenteSuFile = async (utente) => {
   try {
@@ -28,15 +28,15 @@ async function getUsers() {
   }
 }*/
 
-async function createUser(utente) {
-  const user = await user.create({ name: utente.name, email: utente.email });
-  console.log(user.toJSON());
+async function createUtenti(utente) {
+  const utenti = await Utenti.create({ name: utente.nome, email: utente.email });
+  console.log(utenti.toJSON());
   }
-  //createUser();
+  //createUtenti();
 
 const scriviUtentiSulFile = async (data) => {
   try {
-    await createUser(data)//fs.writeFile('database/users'+'.json', JSON.stringify(data, null, 2), "utf8");
+    await createUtenti(data)//fs.writeFile('database/Utentis'+'.json', JSON.stringify(data, null, 2), "utf8");
     return true;
   } catch (error) {
     console.error('Errore scrittura su file!!!!!!!!!!!', error)
@@ -47,14 +47,14 @@ const scriviUtentiSulFile = async (data) => {
 
 //FUNZIONI API 
 const findAll = async (req, res) => {
-  const data = await getUsers();//leggiUtentiDalFile();
+  const data = await getUtenti();//leggiUtentiDalFile();
   res.status(200).json(data);
 };
 
 const findById = async (req, res) => {
   const idUtente = req.params.id;
-  const data = await getUsers(); //leggiUtentiDalFile();
-  const utente = data.utenti.find(user => user.id === parseInt(idUtente, 10));
+  const data = await getUtenti(); //leggiUtentiDalFile();
+  const utente = data.utenti.find(utenti => utenti.id === parseInt(idUtente, 10));
   if (utente) {
     res.status(200).json(utente);
   } else {
@@ -64,18 +64,18 @@ const findById = async (req, res) => {
 
 const postById = async (req, res) => {
   try {
-    const data = await getUsers(); //leggiUtentiDalFile();
-    const nuovoUserId = data.utenti.length + 1;
+    const data = await getUtenti(); //leggiUtentiDalFile();
+    const nuovoUtentiId = data.utenti.length + 1;
     
     const utente = req.body;
-    utente.id = nuovoUserId;
+    utente.id = nuovoUtentiId;
     
     data.utenti.push(utente);
     
     const result = await scriviUtentiSulFile(data);
     if (result) {
       console.log('result : '+ result)
-      const result2 = await createUser(utente)//scriviSingoloUtenteSuFile(utente);
+      const result2 = await createUtenti(utente)//scriviSingoloUtenteSuFile(utente);
       if (result2) {
         console.log('result2 : '+ result2)
         res.status(201).send({message: 'Utente inserito correttamente'});
@@ -94,7 +94,7 @@ const postById = async (req, res) => {
 
 /*const updateById = async (req, res) => {
   const data = await leggiUtentiDalFile();
-  const indiceUtenteTrovato = data.utenti.findIndex(user => user.id === parseInt(id, 10));
+  const indiceUtenteTrovato = data.utenti.findIndex(Utenti => Utenti.id === parseInt(id, 10));
   if (indiceUtenteTrovato >= 0) {
       data.utenti[indiceUtenteTrovato] = req.body;
       await scriviUtentiSulFile(data);
@@ -104,18 +104,18 @@ const postById = async (req, res) => {
   }
 };*/
 
-async function updateById(userId) {
-  const user = await user.findByPk(userId);
-  user.name = 'Updated Name';
-  await user.save();
-  console.log(user.toJSON());
+async function updateById(UtentiId) {
+  const utenti = await Utenti.findByPk(UtentiId);
+  utenti.name = 'Updated Name';
+  await utenti.save();
+  console.log(utenti.toJSON());
   }
-  //updateUser(1);
+  //updateUtenti(1);
 
 /*const deleteById = async (req, res) => {
   const idUtente = req.params.id;
   const data = await leggiUtentiDalFile();
-  const indiceUtenteTrovato = data.utenti.findIndex(user => user.id === parseInt(idUtente, 10));
+  const indiceUtenteTrovato = data.utenti.findIndex(Utenti => Utenti.id === parseInt(idUtente, 10));
   if (indiceUtenteTrovato !== -1) {
     data.utenti.splice(indiceUtenteTrovato, 1);
     await scriviUtentiSulFile(data);
@@ -125,16 +125,16 @@ async function updateById(userId) {
   }
 };*/
 
-async function deleteById(userId) {
-  const user = await user.findByPk(userId);
-  await user.destroy();
-  console.log('User deleted');
+async function deleteById(UtentiId) {
+  const utenti = await Utenti.findByPk(UtentiId);
+  await utenti.destroy();
+  console.log('Utenti deleted');
   }
-  //deleteUser(1);
+  //deleteUtenti(1);
 
 
 module.exports = {
-  userController: {
+  utentiController: {
     findAll,
     findById,
     postById,

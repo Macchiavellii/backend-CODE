@@ -1,3 +1,3 @@
 const { Sequelize } = require('sequelize');
-const sequelize = new Sequelize('mysql://root:root@localhost:3306/myapp');
+const sequelize = new Sequelize('mysql://root:root@localhost:3306/un_database');
 module.exports = sequelize;
