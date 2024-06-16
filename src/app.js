@@ -1,6 +1,6 @@
 const express = require('express');
 const userRouter = require('./routes/user.route');
-const bookRouter = require('./routes/book.route');
+//const bookRouter = require('./routes/book.route');
 const app = express();
 
 const sequelize = require('./config/database');
@@ -16,9 +16,9 @@ sequelize.sync({ force: true }).then(() => {
 app.use(express.json());
 
 app.use('/api/user', userRouter);
-app.use('/api/book', bookRouter);
+//app.use('/api/book', bookRouter);
 
-app.get('/', (req,resp) => {
+app.get('/', (req, resp) => {
     resp.send({message: 'API di root ( / ) non implementata!'})
 });
 

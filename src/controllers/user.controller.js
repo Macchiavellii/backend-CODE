@@ -69,7 +69,7 @@ const scriviUtentiSulFile = async (data) => {
 
 
 //FUNZIONI API */
-const findAll = async (res) => {
+const findAll = async (req,res) => {
   const data = await getUsers();//leggiUtentiDalFile();
   res.status(200).json(data);
 };
