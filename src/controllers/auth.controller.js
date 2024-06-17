@@ -18,7 +18,7 @@ exports.register = async (req,res) => {
     }
 }
 
-exports.login = async (req,res) => {
+/*exports.login = async (req,res) => {
     const { username, password } = req.body
     const user = users.find(u => u.username === username)
     if (user && await bcrypt.compare(password, user.password)) {
@@ -27,6 +27,18 @@ exports.login = async (req,res) => {
     }
     else {
         res.status(401).send('Invalid Credentials')
+    }
+}*/
+
+exports.login = async (req, res) => {
+    const {username, password, email} = req.body;
+    const user = await User.findAll();
+    console.log(email+'->'+user[0].password);
+    if (user && await bcrypt.compare(password, user[0].password)){
+        const token = jwt.sign({username}, key, {expiresIn: '1h'});
+        res.json({token});
+    }else{
+        res.status(401).send('Invalid credentials');
     }
 }
 
