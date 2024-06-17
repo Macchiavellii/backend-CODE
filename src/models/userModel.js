@@ -9,6 +9,11 @@ email: {
 type: DataTypes.STRING,
 allowNull: false,
 unique: true
-}
+},
+password: {
+    type: DataTypes.STRING,
+    allowNull: false
+},
+freezeTableName:true
 });
 module.exports = User;

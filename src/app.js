@@ -1,5 +1,6 @@
 const express = require('express');
 const userRouter = require('./routes/user.route');
+const authRouter = require('./routes/auth.route')
 //const bookRouter = require('./routes/book.route');
 const app = express();
 
@@ -16,6 +17,7 @@ sequelize.sync({ force: true }).then(() => {
 app.use(express.json());
 
 app.use('/api/user', userRouter);
+app.use('/api/auth', authRouter)
 //app.use('/api/book', bookRouter);
 
 app.get('/', (req, resp) => {
