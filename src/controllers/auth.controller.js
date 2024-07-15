@@ -4,7 +4,7 @@ const config = require('../config/config')
 const User = require('../models/userModel')
 
 const key = config.secretKey
-const users = []
+//const users = []
 
 exports.register = async (req,res) => {
     try {
@@ -35,7 +35,7 @@ exports.login = async (req, res) => {
     const user = await User.findAll();
     console.log(email+'->'+user[0].password);
     if (user && await bcrypt.compare(password, user[0].password)){
-        const token = jwt.sign({username}, key, {expiresIn: '1h'});
+        const token = jwt.sign({username}, key, {expiresIn: '6h'});
         res.json({token});
     }else{
         res.status(401).send('Invalid credentials');
